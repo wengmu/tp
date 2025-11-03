@@ -1,8 +1,5 @@
 package seedu.address.ui;
 
-import static seedu.address.logic.parser.ParserUtil.DEFAULT_BUDGET_MAX;
-import static seedu.address.logic.parser.ParserUtil.DEFAULT_BUDGET_MIN;
-
 import java.util.Comparator;
 
 import javafx.fxml.FXML;
@@ -65,25 +62,24 @@ public class ContactCard extends UiPart<Region> {
     public ContactCard(Contact contact, int displayedIndex) {
         super(FXML);
         this.contact = contact;
-
-        // Always displayed fields - ID combined with name
+        uuid.setText("ID: " + contact.getUuid().getValue());
         id.setText(displayedIndex + ". ");
-        name.setText(contact.getName().fullName + " (ID: " + contact.getUuid().getValue() + ")");
+        name.setText(contact.getName().fullName);
         phone.setText("Phone: " + contact.getPhone().value);
 
-        // Hide the separate UUID label since we combined it with name
-        hideLabel(uuid);
+        // Always displayed fields
+        uuid.setText("ID: " + contact.getUuid().getValue());
+        id.setText(displayedIndex + ". ");
+        name.setText(contact.getName().fullName);
+        phone.setText("Phone: " + contact.getPhone().value);
+        budgetMin.setText("Budget Minimum: $" + contact.getBudgetMin().toString());
+        budgetMax.setText("Budget Maximum: $" + contact.getBudgetMax().toString());
 
         // Conditionally displayed fields
         setLabelIfNotEmpty(email, "Email: ", contact.getEmail().value);
         setLabelIfNotEmpty(address, "Address: ", contact.getAddress().value);
         setLabelIfNotEmpty(notes, "Notes: ", contact.getNotes().toString());
         setLabelIfNotEmpty(status, "Status: ", contact.getStatus().toString());
-
-        // Budget fields with default value checks
-        setLabelIfNotDefault(budgetMin, "Budget Minimum: $", contact.getBudgetMin().toString(), DEFAULT_BUDGET_MIN);
-        setLabelIfNotDefault(budgetMax, "Budget Maximum: $", contact.getBudgetMax().toString(), DEFAULT_BUDGET_MAX);
-
 
         // Tags
         setTagsIfNotEmpty(contact);
@@ -112,22 +108,6 @@ public class ContactCard extends UiPart<Region> {
      */
     private void setLabelIfNotEmpty(Label label, String prefix, String value) {
         if (value.isEmpty()) {
-            hideLabel(label);
-        } else {
-            label.setText(prefix + value);
-        }
-    }
-
-    /**
-     * Sets the label text if the value is not the default value, otherwise hides the label.
-     *
-     * @param label The label to set.
-     * @param prefix The prefix text
-     * @param value The value to display.
-     * @param defaultValue The default value to check against.
-     */
-    private void setLabelIfNotDefault(Label label, String prefix, String value, String defaultValue) {
-        if (value.equals(defaultValue)) {
             hideLabel(label);
         } else {
             label.setText(prefix + value);
@@ -164,4 +144,5 @@ public class ContactCard extends UiPart<Region> {
             label.setText(prefix + Uuid.getGuiSetDisplayAsString(ids));
         }
     }
+
 }
